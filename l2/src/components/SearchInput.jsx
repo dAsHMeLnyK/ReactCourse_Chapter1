@@ -12,3 +12,4 @@ const SearchInput = ({ searchTerm, onSearchChange}) => {
 };
 
 export default SearchInput;
+
