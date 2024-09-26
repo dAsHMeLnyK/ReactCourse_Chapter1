@@ -15,7 +15,7 @@ const ToDoContainer = () => {
       }
       function handleSubmit(event) {
         event.preventDefault();
-  
+
         if (!newToDo || !newToDo.title.trim()) {
           alert("Please enter a valid to-do title.");
           return;
@@ -30,7 +30,7 @@ const ToDoContainer = () => {
       function handleSearchChange(event) {
         setSearchTerm(event.target.value);
       }
-  
+
       const filteredToDos = toDos.filter (toDo =>
         toDo.title.toLowerCase().includes(searchTerm.toLowerCase())
       );
