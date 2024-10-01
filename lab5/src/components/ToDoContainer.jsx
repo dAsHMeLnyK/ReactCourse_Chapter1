@@ -1,23 +1,14 @@
-import { useState, useEffect } from 'react';
-import React from 'react';
+import React, { useState } from 'react';
 import AddToDoComponent from './AddToDoComponents';
 import SearchInput from './SearchInput';
 import ToDoTable from './ToDoTable';
 import useGetAllToDo from '../hooks/useGetAllToDo';
-import LoadingComponent from './LoadingComponent';
+import Loader from './Loader';
 
 const ToDoContainer = () => {
-    const { isLoading, data: toDosFromAPI, error } = useGetAllToDo();
-    const [toDos, setToDos] = useState([]);
+    const { isLoading, data: toDos, error, setData: setToDos } = useGetAllToDo();
     const [newToDo, setNewToDo] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
-
-    useEffect(() => {
-        if (toDosFromAPI.length > 0) {
-            console.log("Завантажені to-dos з API:", toDosFromAPI);
-            setToDos(toDosFromAPI);
-        }
-    }, [toDosFromAPI]);
 
     function handleNewTitleChange(event) {
         setNewToDo({ id: Date.now(), title: event.target.value });
@@ -47,30 +38,29 @@ const ToDoContainer = () => {
         toDo.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-
-    if (error) {
-        return <p>Error: {error}</p>;
-    }
-
     return (
-        <>
-            <AddToDoComponent
-                title={newToDo?.title}
-                onTitleChange={handleNewTitleChange}
-                onSubmit={handleSubmit}
-            />
-            <SearchInput
-                searchTerm={searchTerm}
-                onSearchChange={handleSearchChange}
-            />
-            <LoadingComponent
-                loading = {isLoading}>
-                {filteredToDos.length > 0 ? (
-                <ToDoTable toDos={filteredToDos} onDelete={handleDelete} />
+        <Loader isLoading={isLoading}>
+            {error ? (
+                <p>Error: {error}</p>
             ) : (
-                <p>No to-dos found.</p>
-            )}</LoadingComponent>
-        </>
+                <>
+                    <AddToDoComponent
+                        title={newToDo?.title}
+                        onTitleChange={handleNewTitleChange}
+                        onSubmit={handleSubmit}
+                    />
+                    <SearchInput
+                        searchTerm={searchTerm}
+                        onSearchChange={handleSearchChange}
+                    />
+                    {filteredToDos.length > 0 ? (
+                        <ToDoTable toDos={filteredToDos} onDelete={handleDelete} />
+                    ) : (
+                        <p>No to-dos found.</p>
+                    )}
+                </>
+            )}
+        </Loader>
     );
 };
 
