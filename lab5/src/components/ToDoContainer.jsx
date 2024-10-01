@@ -7,11 +7,17 @@ import useGetAllToDo from '../hooks/useGetAllToDo';
 import LoadingComponent from './LoadingComponent';
 
 const ToDoContainer = () => {
-    const { isLoading, data: toDos, error, setData: setToDos } = useGetAllToDo();
-
+    const { isLoading, data: toDosFromAPI, error } = useGetAllToDo();
+    const [toDos, setToDos] = useState([]);
     const [newToDo, setNewToDo] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
 
+    useEffect(() => {
+        if (toDosFromAPI.length > 0) {
+            console.log("Завантажені to-dos з API:", toDosFromAPI);
+            setToDos(toDosFromAPI);
+        }
+    }, [toDosFromAPI]);
 
     function handleNewTitleChange(event) {
         setNewToDo({ id: Date.now(), title: event.target.value });
@@ -42,10 +48,6 @@ const ToDoContainer = () => {
     );
 
 
-    if (isLoading) {
-        return <LoadingComponent />;
-    }
-
     if (error) {
         return <p>Error: {error}</p>;
     }
@@ -61,11 +63,13 @@ const ToDoContainer = () => {
                 searchTerm={searchTerm}
                 onSearchChange={handleSearchChange}
             />
-            {filteredToDos.length > 0 ? (
+            <LoadingComponent
+                loading = {isLoading}>
+                {filteredToDos.length > 0 ? (
                 <ToDoTable toDos={filteredToDos} onDelete={handleDelete} />
             ) : (
                 <p>No to-dos found.</p>
-            )}
+            )}</LoadingComponent>
         </>
     );
 };

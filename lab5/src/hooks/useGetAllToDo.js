@@ -24,7 +24,7 @@ const useGetAllToDo = () => {
     fetchToDos();
   }, []);
 
-  return { isLoading, data, error, setData };
+  return { isLoading, data, error };
 };
 
 export default useGetAllToDo;
