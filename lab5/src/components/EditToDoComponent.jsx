@@ -2,9 +2,16 @@ import React, { useState } from "react";
 
 const EditToDoComponent = ({ id, title, onSave, onCancel }) => {
     const [editedTitle, setEditedTitle] = useState(title);
+    const [error, setError] = useState(null);
 
     const handleSaveClick = () => {
-        onSave(id, editedTitle);
+        if (!editedTitle.trim()) {
+            setError("Title is required");
+        } else {
+            onSave(id, editedTitle);
+            setError(null);
+        }
+
     };
 
     return (
@@ -13,7 +20,11 @@ const EditToDoComponent = ({ id, title, onSave, onCancel }) => {
                 type="text"
                 value={editedTitle}
                 onChange={(e) => setEditedTitle(e.target.value)}
+                style={{
+                    borderColor: error ? "red" : "initial",
+                }}
             />
+            {error && <p style={{ color: "red" }}>{error}</p>}
             <button onClick={handleSaveClick}>Save</button>
             <button onClick={onCancel}>Cancel</button>
         </>
