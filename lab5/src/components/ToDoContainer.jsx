@@ -30,6 +30,13 @@ const ToDoContainer = () => {
         setToDos(updatedToDos);
     }
 
+    function handleEdit(id, newTitle) {
+        const updatedToDos = toDos.map(toDo =>
+            toDo.id === id ? { ...toDo, title: newTitle } : toDo
+        );
+        setToDos(updatedToDos);
+    }
+
     function handleSearchChange(event) {
         setSearchTerm(event.target.value);
     }
@@ -54,7 +61,11 @@ const ToDoContainer = () => {
                         onSearchChange={handleSearchChange}
                     />
                     {filteredToDos.length > 0 ? (
-                        <ToDoTable toDos={filteredToDos} onDelete={handleDelete} />
+                        <ToDoTable
+                            toDos={filteredToDos}
+                            onDelete={handleDelete}
+                            onEdit={handleEdit}
+                        />
                     ) : (
                         <p>No to-dos found.</p>
                     )}
