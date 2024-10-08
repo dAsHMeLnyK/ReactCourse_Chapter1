@@ -4,7 +4,7 @@ import { Audio } from 'react-loader-spinner';
 const Loader = ({ isLoading, children }) => {
     return (
         <>
-            {isLoading ? (
+            {isLoading && (
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
                     <Audio
                         height="80"
@@ -14,9 +14,8 @@ const Loader = ({ isLoading, children }) => {
                         ariaLabel="loading"
                     />
                 </div>
-            ) : (
-                children
             )}
+            {children}
         </>
     );
 };
